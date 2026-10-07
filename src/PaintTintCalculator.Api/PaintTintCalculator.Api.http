@@ -1,0 +1,6 @@
+@PaintTintCalculator.Api_HostAddress = http://localhost:5042
+
+GET {{PaintTintCalculator.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
