@@ -210,8 +210,8 @@ Content-Type: application/json
 ## 📌 Documented Business Assumptions
 
 1. **Currency**:
-   - The UI display and assignment mockups display `₹` while specifications mention SAR.
-   - The system supports configurable currency formatting (defaulting to `₹`) configured in `appsettings.json` and WPF resources.
+   - The WPF client displays all prices in SAR.
+   - API price values are numeric and are interpreted as SAR by the client.
 2. **Downstream Rounding Propagation**:
    - The formula scaling scales `MlPerLitre × CanSizeLitres`, which is rounded to the nearest `0.05 ml` dispenser increment.
    - All subsequent calculations (total colorant, tint percentage, cost per colorant, and persisted historical records) use the **actual rounded dispensed amount**.

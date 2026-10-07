@@ -250,7 +250,7 @@
                                   Height="40"
                                   FontSize="14"
                                   TabIndex="3" />
-                        <TextBlock Text="{Binding SelectedBase.PricePerLitre, StringFormat='Base rate: ₹{0:F2} / Litre'}"
+                        <TextBlock Text="{Binding SelectedBase.PricePerLitre, StringFormat='Base rate: SAR {0:F2} / Litre'}"
                                    FontSize="12" Foreground="{StaticResource BrushTextMuted}" Margin="0,4,0,0" />
                     </StackPanel>
 
@@ -293,8 +293,8 @@
                             <DataGridTextColumn Header="Colorant" Binding="{Binding ColorantName}" Width="*" FontWeight="Medium" />
                             <DataGridTextColumn Header="Per Litre" Binding="{Binding MlPerLitre, StringFormat='{}{0:F4} ml'}" Width="120" />
                             <DataGridTextColumn Header="Dispensed Qty" Binding="{Binding DispensedMl, StringFormat='{}{0:F2} ml'}" Width="140" FontWeight="Bold" />
-                            <DataGridTextColumn Header="Rate (ml)" Binding="{Binding CostPerMl, StringFormat='₹{0:F4}'}" Width="110" />
-                            <DataGridTextColumn Header="Subtotal" Binding="{Binding TotalCost, StringFormat='₹{0:F2}'}" Width="110" FontWeight="SemiBold" />
+                            <DataGridTextColumn Header="Rate (ml)" Binding="{Binding CostPerMl, StringFormat='SAR {0:F4}'}" Width="110" />
+                            <DataGridTextColumn Header="Subtotal" Binding="{Binding TotalCost, StringFormat='SAR {0:F2}'}" Width="110" FontWeight="SemiBold" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -339,7 +339,7 @@
                     <Border Grid.Column="2" BorderBrush="{StaticResource BrushBorder}" BorderThickness="0,0,1,0" Padding="16,0">
                         <StackPanel>
                             <TextBlock Text="BASE PAINT COST" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushTextSecondary}" />
-                            <TextBlock Text="{Binding BaseCost, StringFormat='₹{0:F2}'}"
+                            <TextBlock Text="{Binding BaseCost, StringFormat='SAR {0:F2}'}"
                                        FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,4,0,0" />
                             <TextBlock Text="Can volume base" FontSize="12" Foreground="{StaticResource BrushTextMuted}" Margin="0,2,0,0" />
                         </StackPanel>
@@ -349,7 +349,7 @@
                     <Border Grid.Column="3" BorderBrush="{StaticResource BrushBorder}" BorderThickness="0,0,1,0" Padding="16,0">
                         <StackPanel>
                             <TextBlock Text="COLORANT COST" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushTextSecondary}" />
-                            <TextBlock Text="{Binding ColorantCost, StringFormat='₹{0:F2}'}"
+                            <TextBlock Text="{Binding ColorantCost, StringFormat='SAR {0:F2}'}"
                                        FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,4,0,0" />
                             <TextBlock Text="Tint additive cost" FontSize="12" Foreground="{StaticResource BrushTextMuted}" Margin="0,2,0,0" />
                         </StackPanel>
@@ -358,7 +358,7 @@
                     <!-- Metric 5: Grand Total & Dispense Action -->
                     <StackPanel Grid.Column="4" Margin="16,0,0,0" VerticalAlignment="Center">
                         <TextBlock Text="TOTAL FORMULA PRICE" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushTextSecondary}" />
-                        <TextBlock Text="{Binding TotalPrice, StringFormat='₹{0:F2}'}"
+                        <TextBlock Text="{Binding TotalPrice, StringFormat='SAR {0:F2}'}"
                                    FontSize="26" FontWeight="Bold" Foreground="{StaticResource BrushPrimaryActive}" Margin="0,2,0,8" />
                         <Button Content="Dispense Formula"
                                 Command="{Binding DispenseCommand}"
@@ -397,7 +397,7 @@
                     </Grid>
                 </Border>
 
-                <!-- Inline Success Banner -->
+                <!-- Snackbar-style success notification -->
                 <Border Background="{StaticResource BrushSuccessSoft}"
                         BorderBrush="{StaticResource BrushSuccess}"
                         BorderThickness="1"
@@ -438,4 +438,3 @@
         </Grid>
     </Grid>
 </Window>
-

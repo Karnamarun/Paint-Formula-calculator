@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Windows.Threading;
 using PaintTintCalculator.Wpf.Commands;
 using PaintTintCalculator.Wpf.Models;
 using PaintTintCalculator.Wpf.Services;
@@ -9,6 +10,7 @@ namespace PaintTintCalculator.Wpf.ViewModels;
 public class MainViewModel : ViewModelBase
 {
     private readonly IApiClient _apiClient;
+    private readonly DispatcherTimer _successNotificationTimer;
 
     private string _searchText = string.Empty;
     private ShadeModel? _selectedShade;
@@ -22,7 +24,6 @@ public class MainViewModel : ViewModelBase
     private decimal _colorantCost;
     private decimal _totalPrice;
 
-    private string _currencySymbol = "₹";
     private bool _isConnected;
     private string _connectionStatusText = "Connecting...";
 
@@ -96,12 +97,6 @@ public class MainViewModel : ViewModelBase
     public decimal BaseCost { get => _baseCost; private set => SetProperty(ref _baseCost, value); }
     public decimal ColorantCost { get => _colorantCost; private set => SetProperty(ref _colorantCost, value); }
     public decimal TotalPrice { get => _totalPrice; private set => SetProperty(ref _totalPrice, value); }
-
-    public string CurrencySymbol
-    {
-        get => _currencySymbol;
-        set => SetProperty(ref _currencySymbol, value);
-    }
 
     public bool IsConnected
     {
@@ -183,6 +178,15 @@ public class MainViewModel : ViewModelBase
     public MainViewModel(IApiClient? apiClient)
     {
         _apiClient = apiClient ?? new ApiClient();
+        _successNotificationTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(5)
+        };
+        _successNotificationTimer.Tick += (_, _) =>
+        {
+            _successNotificationTimer.Stop();
+            SuccessMessage = null;
+        };
 
         foreach (var option in CanSizeOption.DefaultOptions)
         {
@@ -340,6 +344,8 @@ public class MainViewModel : ViewModelBase
             {
                 LastJobId = response.JobId;
                 SuccessMessage = $"✓ Dispense saved successfully. Job #{response.JobId} recorded for {SelectedShade.Name} ({SelectedCanSize.DisplayText}).";
+                _successNotificationTimer.Stop();
+                _successNotificationTimer.Start();
             }
             else
             {
@@ -368,6 +374,7 @@ public class MainViewModel : ViewModelBase
 
     public void ClearMessages()
     {
+        _successNotificationTimer.Stop();
         ErrorMessage = null;
         SuccessMessage = null;
     }
