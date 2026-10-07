@@ -5,3 +5,4 @@ namespace PaintTintCalculator.Wpf;
 public partial class App : Application
 {
 }
+

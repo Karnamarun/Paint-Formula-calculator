@@ -7,3 +7,4 @@ public interface ITintCalculationService
 {
     TintCalculationResultDto Calculate(Shade shade, Base baseEntity, decimal canSizeLitres);
 }
+

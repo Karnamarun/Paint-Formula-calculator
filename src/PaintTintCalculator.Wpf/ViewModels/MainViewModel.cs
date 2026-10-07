@@ -368,3 +368,4 @@ public class MainViewModel : ViewModelBase
         SuccessMessage = null;
     }
 }
+

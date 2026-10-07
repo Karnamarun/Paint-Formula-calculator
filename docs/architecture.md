@@ -158,3 +158,4 @@ During technical evaluation, small on-the-spot changes can be applied cleanly:
 ### Scenario 3: Update Medium Base Maximum Tint Percentage
 - **Persistence / Seeder**:
   Adjust value in [SeedDataService.cs](file:///home/parthiban/Desktop/Assignment/src/PaintTintCalculator.Infrastructure/Seed/SeedDataService.cs) or update the database record. The calculation logic reads `baseEntity.MaxTintPercent` dynamically and enforces limits without requiring any code changes in controllers or ViewModels.
+

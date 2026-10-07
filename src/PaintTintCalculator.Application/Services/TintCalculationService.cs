@@ -82,3 +82,4 @@ public class TintCalculationService : ITintCalculationService
             totalPrice);
     }
 }
+

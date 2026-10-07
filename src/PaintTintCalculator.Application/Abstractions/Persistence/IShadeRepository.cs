@@ -8,3 +8,4 @@ public interface IShadeRepository
     Task<Shade?> GetByIdWithFormulaAsync(int id, CancellationToken cancellationToken = default);
     Task<IReadOnlyList<Shade>> GetAllAsync(CancellationToken cancellationToken = default);
 }
+

@@ -41,3 +41,4 @@ public class CanSizeTests
         Assert.Equal(new[] { 1.0m, 4.0m, 10.0m, 20.0m }, CanSize.SupportedLitres);
     }
 }
+

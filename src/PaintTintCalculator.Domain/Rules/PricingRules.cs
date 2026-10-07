@@ -17,3 +17,4 @@ public static class PricingRules
         return Math.Round(baseCost + totalColorantCost, 2, MidpointRounding.AwayFromZero);
     }
 }
+

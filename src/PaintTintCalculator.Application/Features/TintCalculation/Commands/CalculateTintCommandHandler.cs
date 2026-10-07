@@ -38,3 +38,4 @@ public class CalculateTintCommandHandler
         return _tintCalculationService.Calculate(shade, baseEntity, request.CanSizeLitres);
     }
 }
+

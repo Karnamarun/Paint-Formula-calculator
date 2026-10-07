@@ -7,3 +7,4 @@
         <ResourceDictionary Source="Controls.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
+

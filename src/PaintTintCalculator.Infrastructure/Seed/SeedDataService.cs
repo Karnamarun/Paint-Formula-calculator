@@ -127,3 +127,4 @@ public class SeedDataService
         await _context.Shades.AddRangeAsync(new[] { oceanMist, terracotta, sageGreen, sunsetRose }, cancellationToken);
     }
 }
+

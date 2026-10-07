@@ -62,3 +62,4 @@ public class GetBasesQueryHandler
         return bases.Select(b => new BaseDto(b.Id, b.Name, b.MaxTintPercent, b.PricePerLitre)).ToList();
     }
 }
+

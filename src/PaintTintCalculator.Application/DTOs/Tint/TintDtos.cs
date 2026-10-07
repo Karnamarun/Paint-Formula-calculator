@@ -30,3 +30,4 @@ public sealed record TintCalculationResultDto(
     decimal BaseCost,
     decimal ColorantCost,
     decimal TotalPrice);
+

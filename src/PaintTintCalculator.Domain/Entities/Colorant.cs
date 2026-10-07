@@ -10,3 +10,4 @@ public class Colorant
     public ICollection<FormulaItem> FormulaItems { get; set; } = new List<FormulaItem>();
     public ICollection<DispenseJobItem> DispenseJobItems { get; set; } = new List<DispenseJobItem>();
 }
+

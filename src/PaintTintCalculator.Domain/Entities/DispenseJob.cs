@@ -15,3 +15,4 @@ public class DispenseJob
     public Base Base { get; set; } = null!;
     public ICollection<DispenseJobItem> Items { get; set; } = new List<DispenseJobItem>();
 }
+

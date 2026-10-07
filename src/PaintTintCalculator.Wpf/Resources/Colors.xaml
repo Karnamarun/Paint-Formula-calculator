@@ -61,3 +61,4 @@
     <SolidColorBrush x:Key="BrushDangerSoft" Color="{StaticResource ColorDangerSoft}" />
 
 </ResourceDictionary>
+

@@ -57,3 +57,4 @@ public class ShadesController : ControllerBase
         return Ok(bases);
     }
 }
+

@@ -10,3 +10,4 @@ public class Shade
     public ICollection<FormulaItem> FormulaItems { get; set; } = new List<FormulaItem>();
     public ICollection<DispenseJob> DispenseJobs { get; set; } = new List<DispenseJob>();
 }
+

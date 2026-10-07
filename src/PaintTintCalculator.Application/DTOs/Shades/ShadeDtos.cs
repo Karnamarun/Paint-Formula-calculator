@@ -25,3 +25,4 @@ public sealed record ShadeDetailsDto(
     string Name,
     string HexColor,
     IReadOnlyList<FormulaItemDto> Formulas);
+

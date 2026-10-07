@@ -12,3 +12,4 @@ public class FormulaItem
     public Base Base { get; set; } = null!;
     public Colorant Colorant { get; set; } = null!;
 }
+

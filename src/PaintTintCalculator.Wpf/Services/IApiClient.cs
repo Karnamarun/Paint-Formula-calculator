@@ -43,3 +43,4 @@ public class DispenseResponseModel
     public decimal TotalPrice { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
 }
+

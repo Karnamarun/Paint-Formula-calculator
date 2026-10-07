@@ -229,3 +229,4 @@ Content-Type: application/json
 - [x] Strictly `decimal` used for measurements and currency
 - [x] Server recalculates all figures before recording jobs
 - [x] 62 automated unit and integration tests passing
+

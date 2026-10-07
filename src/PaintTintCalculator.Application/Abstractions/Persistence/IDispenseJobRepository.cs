@@ -8,3 +8,4 @@ public interface IDispenseJobRepository
     Task<DispenseJob?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
     Task<IReadOnlyList<DispenseJob>> GetRecentAsync(int count = 20, CancellationToken cancellationToken = default);
 }
+

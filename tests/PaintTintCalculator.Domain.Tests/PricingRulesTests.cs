@@ -49,3 +49,4 @@ public class PricingRulesTests
         Assert.Equal(1010.01m, actual);
     }
 }
+

@@ -26,3 +26,4 @@ public sealed record DispenseJobDto(
     decimal TotalPrice,
     DateTimeOffset CreatedAt,
     IReadOnlyList<DispenseJobItemDto> Items);
+

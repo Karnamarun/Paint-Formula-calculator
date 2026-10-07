@@ -11,3 +11,4 @@ public class DispenseJobItem
     public DispenseJob DispenseJob { get; set; } = null!;
     public Colorant Colorant { get; set; } = null!;
 }
+

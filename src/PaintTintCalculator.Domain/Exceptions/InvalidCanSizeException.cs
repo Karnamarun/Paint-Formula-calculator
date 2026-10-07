@@ -10,3 +10,4 @@ public sealed class InvalidCanSizeException : DomainException
         CanSizeLitres = canSizeLitres;
     }
 }
+

@@ -1,13 +1,5 @@
-using Microsoft.EntityFrameworkCore;
+using PaintTintCalculator.Api.Extensions;
 using PaintTintCalculator.Api.Middleware;
-using PaintTintCalculator.Application.Abstractions.Persistence;
-using PaintTintCalculator.Application.Abstractions.Services;
-using PaintTintCalculator.Application.Features.DispenseJobs.Commands;
-using PaintTintCalculator.Application.Features.Shades.Queries;
-using PaintTintCalculator.Application.Features.TintCalculation.Commands;
-using PaintTintCalculator.Application.Services;
-using PaintTintCalculator.Infrastructure.Persistence;
-using PaintTintCalculator.Infrastructure.Persistence.Repositories;
 using PaintTintCalculator.Infrastructure.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,42 +20,22 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Persistence Registration
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-                       ?? "Data Source=painttint.db";
+// Register Infrastructure persistence (DbContext, Repositories, UoW)
+builder.Services.AddInfrastructure(builder.Configuration);
 
-builder.Services.AddDbContext<PaintTintDbContext>(options =>
-{
-    options.UseSqlite(connectionString);
-});
-
-builder.Services.AddScoped<IShadeRepository, ShadeRepository>();
-builder.Services.AddScoped<IBaseRepository, BaseRepository>();
-builder.Services.AddScoped<IDispenseJobRepository, DispenseJobRepository>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<SeedDataService>();
-
-// Application Services Registration
-builder.Services.AddScoped<ITintCalculationService, TintCalculationService>();
-
-// Feature / Use Case Handlers Registration
-builder.Services.AddScoped<SearchShadesQueryHandler>();
-builder.Services.AddScoped<GetShadeDetailsQueryHandler>();
-builder.Services.AddScoped<GetBasesQueryHandler>();
-builder.Services.AddScoped<CalculateTintCommandHandler>();
-builder.Services.AddScoped<CreateDispenseJobCommandHandler>();
-builder.Services.AddScoped<GetRecentDispenseJobsQueryHandler>();
+// Register Application use cases and services
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 
-// Seed initial database data
+// Seed initial database data on startup
 using (var scope = app.Services.CreateScope())
 {
     var seeder = scope.ServiceProvider.GetRequiredService<SeedDataService>();
     await seeder.InitializeAsync();
 }
 
-// Global Exception Handling Middleware
+// Global Exception Handling Middleware (translates domain exceptions to structured HTTP errors)
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseCors("AllowAll");
