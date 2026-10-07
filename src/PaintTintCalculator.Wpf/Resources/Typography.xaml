@@ -1,0 +1,47 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <FontFamily x:Key="FontMain">Segoe UI, -apple-system, Roboto, sans-serif</FontFamily>
+
+    <!-- Text Styles -->
+    <Style x:Key="TextHeaderStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource FontMain}" />
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource BrushTextPrimary}" />
+    </Style>
+
+    <Style x:Key="TextTitleStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource FontMain}" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource BrushTextPrimary}" />
+    </Style>
+
+    <Style x:Key="TextSubtitleStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource FontMain}" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="Foreground" Value="{DynamicResource BrushTextPrimary}" />
+    </Style>
+
+    <Style x:Key="TextBodyStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource FontMain}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Foreground" Value="{DynamicResource BrushTextPrimary}" />
+    </Style>
+
+    <Style x:Key="TextCaptionStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource FontMain}" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Foreground" Value="{DynamicResource BrushTextSecondary}" />
+    </Style>
+
+    <Style x:Key="TextMetricStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource FontMain}" />
+        <Setter Property="FontSize" Value="32" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{DynamicResource BrushPrimary}" />
+    </Style>
+
+</ResourceDictionary>

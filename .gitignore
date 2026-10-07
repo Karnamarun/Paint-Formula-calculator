@@ -1,0 +1,22 @@
+## .NET Core / C# gitignore
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vscode/
+.idea/
+*.swp
+*~
+*.log
+*.sqlite
+.env
+.env.*
+!.env.example
+!PaintTintCalculator.sln
+
+*.db-shm
+*.db-wal
+**/bin/
+**/obj/
