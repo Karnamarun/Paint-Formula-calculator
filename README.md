@@ -16,6 +16,30 @@ A professional, production-grade paint tinting formula calculation and dispensin
 
 For a beginner-friendly walkthrough of startup, database creation, request flow, and adding shades and formulas, see [How the Project Works](docs/how-the-project-works.md).
 
+## 🖥️ Tested UI Screenshots
+
+Screenshots from testing the WPF client, including formula calculations, validation errors, shade search, and a successful dispense job:
+
+### Formula calculation and SAR pricing
+
+![Mustard Yellow formula calculated for a 4L Pastel can, with quantities and SAR pricing](docs/screenshots/01-mustard-yellow-pastel-calculation.png)
+
+### Missing formula validation
+
+![Clear error shown when the selected shade has no formula for the Deep base](docs/screenshots/02-missing-formula-validation.png)
+
+### Tint limit validation
+
+![Tint limit exceeded error shown for a 4L Medium base](docs/screenshots/03-tint-limit-validation.png)
+
+### Successful dispense job
+
+![Ocean Mist formula calculation and successful dispense confirmation showing job number 11](docs/screenshots/04-successful-dispense-job.png)
+
+### Shade search and formula validation
+
+![Shade search filtered to Slate Grey, with a missing formula message for the selected base](docs/screenshots/05-shade-search-and-validation.png)
+
 ---
 
 ## 🏛️ Clean Architecture Breakdown
