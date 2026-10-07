@@ -101,7 +101,7 @@ public class DispenseJobRepository : IDispenseJobRepository
             .Include(j => j.Base)
             .Include(j => j.Items)
                 .ThenInclude(i => i.Colorant)
-            .OrderByDescending(j => j.CreatedAt)
+            .OrderByDescending(j => j.Id)
             .Take(count)
             .ToListAsync(cancellationToken);
     }

@@ -108,10 +108,10 @@ public class GetRecentDispenseJobsQueryHandler
         return jobs.Select(j => new DispenseJobDto(
             j.Id,
             j.ShadeId,
-            j.Shade.Code,
-            j.Shade.Name,
+            j.Shade?.Code ?? string.Empty,
+            j.Shade?.Name ?? string.Empty,
             j.BaseId,
-            j.Base.Name,
+            j.Base?.Name ?? string.Empty,
             j.CanSizeLitres,
             j.TotalColorantMl,
             j.TintPercent,
@@ -120,8 +120,8 @@ public class GetRecentDispenseJobsQueryHandler
             j.Items.Select(i => new DispenseJobItemDto(
                 i.Id,
                 i.ColorantId,
-                i.Colorant.Code,
-                i.Colorant.Name,
+                i.Colorant?.Code ?? string.Empty,
+                i.Colorant?.Name ?? string.Empty,
                 i.DispensedMl,
                 i.Cost)).ToList()
         )).ToList();
