@@ -19,7 +19,7 @@ public sealed record CanSize
     {
         if (!IsSupported(litres))
         {
-            var supported = string.Join(", ", SupportedLitres.Select(s => $"{s}L"));
+            var supported = string.Join(", ", SupportedLitres.Select(s => $"{s:G29}L"));
             throw new InvalidCanSizeException(litres, supported);
         }
 

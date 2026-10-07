@@ -17,7 +17,7 @@ public sealed class TintLimitExceededException : DomainException
         decimal maxTintPercent,
         decimal calculatedTintPercent)
         : base(
-            $"Tint limit exceeded. {baseName} base allows a maximum of {maxTintPercent}% ({maxAllowedMl:F2} ml for {canSizeLitres}L can), but current formula requires {calculatedTintPercent:F2}% ({requestedMl:F2} ml).",
+            $"Tint limit exceeded. {baseName} base allows a maximum of {maxTintPercent:G29}% ({maxAllowedMl:F2} ml for {canSizeLitres:G29}L can), but current formula requires {calculatedTintPercent:F2}% ({requestedMl:F2} ml).",
             "TINT_LIMIT_EXCEEDED")
     {
         BaseName = baseName;
