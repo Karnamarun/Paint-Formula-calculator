@@ -1,10 +1,440 @@
 <Window x:Class="PaintTintCalculator.Wpf.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Paint Tint Formula Calculator" Height="720" Width="1280"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:PaintTintCalculator.Wpf.ViewModels"
+        mc:Ignorable="d"
+        Title="Paint Tint Formula Calculator"
+        Height="780" Width="1360"
         MinHeight="720" MinWidth="1280"
+        Background="{StaticResource BrushAppBackground}"
         WindowStartupLocation="CenterScreen">
+
+    <Window.DataContext>
+        <vm:MainViewModel />
+    </Window.DataContext>
+
     <Grid>
-        <TextBlock Text="Paint Tint Formula Calculator" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" />
+        <Grid.ColumnDefinitions>
+            <!-- Left Panel: Shade Catalog -->
+            <ColumnDefinition Width="380" />
+            <!-- Right Panel: Workspace -->
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- ========================================== -->
+        <!-- LEFT PANEL: SHADE CATALOG                  -->
+        <!-- ========================================== -->
+        <Border Grid.Column="0" Background="{StaticResource BrushSidebar}" BorderBrush="{StaticResource BrushBorderDark}" BorderThickness="0,0,1,0">
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Sidebar Title -->
+                <StackPanel Grid.Row="0" Margin="0,0,0,16">
+                    <TextBlock Text="SHADE CATALOG" FontSize="12" FontWeight="Bold" Foreground="{StaticResource BrushTextMuted}" />
+                    <TextBlock Text="Select Paint Color" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource BrushTextWhite}" Margin="0,4,0,0" />
+                </StackPanel>
+
+                <!-- Search Input -->
+                <Grid Grid.Row="1" Margin="0,0,0,16">
+                    <TextBox x:Name="SearchBox"
+                             Style="{StaticResource SearchTextBoxStyle}"
+                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                             Height="42"
+                             TabIndex="1">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding SearchCommand}" />
+                        </TextBox.InputBindings>
+                    </TextBox>
+                    <TextBlock Text="Search by name or code..."
+                               Foreground="{StaticResource BrushTextMuted}"
+                               VerticalAlignment="Center"
+                               Margin="14,0,0,0"
+                               IsHitTestVisible="False"
+                               Visibility="{Binding SearchText, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
+                    <Button Command="{Binding ClearSearchCommand}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Margin="0,0,10,0"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="{StaticResource BrushTextMuted}"
+                            Content="✕"
+                            Cursor="Hand"
+                            Visibility="{Binding SearchText, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
+                </Grid>
+
+                <!-- Shades List -->
+                <ListBox Grid.Row="2"
+                         ItemsSource="{Binding Shades}"
+                         SelectedItem="{Binding SelectedShade}"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         TabIndex="2">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Padding" Value="10" />
+                            <Setter Property="Margin" Value="0,0,0,8" />
+                            <Setter Property="Background" Value="{StaticResource BrushSidebarCard}" />
+                            <Setter Property="Cursor" Value="Hand" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <Border x:Name="itemBorder"
+                                                Background="{TemplateBinding Background}"
+                                                CornerRadius="8"
+                                                Padding="{TemplateBinding Padding}"
+                                                BorderBrush="Transparent"
+                                                BorderThickness="1.5">
+                                            <ContentPresenter />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="itemBorder" Property="Background" Value="{StaticResource BrushSidebarHover}" />
+                                            </Trigger>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="itemBorder" Property="Background" Value="{StaticResource BrushSidebarHover}" />
+                                                <Setter TargetName="itemBorder" Property="BorderBrush" Value="{StaticResource BrushPrimary}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="42" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Color Swatch -->
+                                <Border Grid.Column="0"
+                                        Width="36" Height="36"
+                                        CornerRadius="6"
+                                        Background="{Binding HexColor, Converter={StaticResource HexToBrushConverter}}"
+                                        BorderBrush="#40FFFFFF"
+                                        BorderThickness="1"
+                                        HorizontalAlignment="Left" />
+
+                                <!-- Details -->
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="8,0,0,0">
+                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{StaticResource BrushTextWhite}" FontSize="14" />
+                                    <TextBlock Text="{Binding Code}" Foreground="{StaticResource BrushTextMuted}" FontSize="12" Margin="0,2,0,0" />
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <!-- Footer Info -->
+                <TextBlock Grid.Row="3"
+                           Text="{Binding Shades.Count, StringFormat='Showing {0} shades'}"
+                           Foreground="{StaticResource BrushTextMuted}"
+                           FontSize="12"
+                           HorizontalAlignment="Center"
+                           Margin="0,12,0,0" />
+            </Grid>
+        </Border>
+
+        <!-- ========================================== -->
+        <!-- RIGHT PANEL: WORKSPACE                     -->
+        <!-- ========================================== -->
+        <Grid Grid.Column="1" Margin="24">
+            <Grid.RowDefinitions>
+                <!-- Top Header & Connection -->
+                <RowDefinition Height="Auto" />
+                <!-- Shade Details & Options -->
+                <RowDefinition Height="Auto" />
+                <!-- Formula Table -->
+                <RowDefinition Height="*" />
+                <!-- Metrics & Total -->
+                <RowDefinition Height="Auto" />
+                <!-- Notifications & Actions -->
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Top Header -->
+            <Grid Grid.Row="0" Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Paint Tint Formula Calculator" Style="{StaticResource TextTitleStyle}" />
+                    <TextBlock Text="Clean Architecture Formula Engine &amp; Precision Dispenser" Style="{StaticResource TextCaptionStyle}" Margin="0,2,0,0" />
+                </StackPanel>
+
+                <!-- Status Badge -->
+                <Border Grid.Column="1"
+                        Background="{StaticResource BrushSurface}"
+                        BorderBrush="{StaticResource BrushBorder}"
+                        BorderThickness="1"
+                        CornerRadius="20"
+                        Padding="14,6"
+                        VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="10" Height="10" Margin="0,0,8,0">
+                            <Ellipse.Style>
+                                <Style TargetType="Ellipse">
+                                    <Setter Property="Fill" Value="{StaticResource BrushSuccess}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsConnected}" Value="False">
+                                            <Setter Property="Fill" Value="{StaticResource BrushDanger}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                        <TextBlock Text="{Binding ConnectionStatusText}"
+                                   FontWeight="Medium"
+                                   FontSize="12"
+                                   Foreground="{StaticResource BrushTextPrimary}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Selected Shade Banner & Controls Card -->
+            <Border Grid.Row="1" Style="{StaticResource CardBorderStyle}" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <!-- Selected Swatch & Shade Info -->
+                        <ColumnDefinition Width="340" />
+                        <!-- Base Selector -->
+                        <ColumnDefinition Width="*" />
+                        <!-- Can Size Selector -->
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Large Swatch & Name -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Width="72" Height="72"
+                                CornerRadius="12"
+                                Background="{Binding SelectedShade.HexColor, Converter={StaticResource HexToBrushConverter}}"
+                                BorderBrush="{StaticResource BrushBorder}"
+                                BorderThickness="2">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.15" />
+                            </Border.Effect>
+                        </Border>
+
+                        <StackPanel VerticalAlignment="Center" Margin="16,0,0,0">
+                            <TextBlock Text="{Binding SelectedShade.Name, FallbackValue='Select a Shade'}"
+                                       FontSize="20" FontWeight="Bold"
+                                       Foreground="{StaticResource BrushTextPrimary}" />
+                            <TextBlock Text="{Binding SelectedShade.Code, FallbackValue='--'}"
+                                       FontSize="14" FontWeight="Medium"
+                                       Foreground="{StaticResource BrushTextSecondary}" Margin="0,2,0,0" />
+                            <TextBlock Text="{Binding SelectedShade.HexColor, FallbackValue=''}"
+                                       FontSize="12"
+                                       Foreground="{StaticResource BrushTextMuted}" Margin="0,2,0,0" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Base Selector -->
+                    <StackPanel Grid.Column="1" Margin="20,0,10,0" VerticalAlignment="Center">
+                        <TextBlock Text="PAINT BASE" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,0,6" />
+                        <ComboBox ItemsSource="{Binding Bases}"
+                                  SelectedItem="{Binding SelectedBase}"
+                                  DisplayMemberPath="DisplayText"
+                                  Height="40"
+                                  FontSize="14"
+                                  TabIndex="3" />
+                        <TextBlock Text="{Binding SelectedBase.PricePerLitre, StringFormat='Base rate: ₹{0:F2} / Litre'}"
+                                   FontSize="12" Foreground="{StaticResource BrushTextMuted}" Margin="0,4,0,0" />
+                    </StackPanel>
+
+                    <!-- Can Size Selector -->
+                    <StackPanel Grid.Column="2" Margin="10,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="CAN SIZE" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,0,6" />
+                        <ComboBox ItemsSource="{Binding CanSizes}"
+                                  SelectedItem="{Binding SelectedCanSize}"
+                                  DisplayMemberPath="DisplayText"
+                                  Height="40"
+                                  FontSize="14"
+                                  TabIndex="4" />
+                        <TextBlock Text="{Binding SelectedCanSize.Litres, StringFormat='Volume: {0:G29} Litres'}"
+                                   FontSize="12" Foreground="{StaticResource BrushTextMuted}" Margin="0,4,0,0" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Formula Breakdown Card -->
+            <Border Grid.Row="2" Style="{StaticResource CardBorderStyle}" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,12">
+                        <TextBlock Text="FORMULA BREAKDOWN (SCALED &amp; DISPENSED)"
+                                   FontSize="12" FontWeight="Bold" Foreground="{StaticResource BrushTextSecondary}" />
+                        <TextBlock Text="Dispenser precision: 0.05 ml increments"
+                                   FontSize="12" Foreground="{StaticResource BrushTextMuted}"
+                                   HorizontalAlignment="Right" />
+                    </Grid>
+
+                    <DataGrid Grid.Row="1"
+                              ItemsSource="{Binding FormulaRows}"
+                              Style="{StaticResource ModernDataGridStyle}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Code" Binding="{Binding ColorantCode}" Width="90" FontWeight="SemiBold" />
+                            <DataGridTextColumn Header="Colorant" Binding="{Binding ColorantName}" Width="*" FontWeight="Medium" />
+                            <DataGridTextColumn Header="Per Litre" Binding="{Binding MlPerLitre, StringFormat='{}{0:F4} ml'}" Width="120" />
+                            <DataGridTextColumn Header="Dispensed Qty" Binding="{Binding DispensedMl, StringFormat='{}{0:F2} ml'}" Width="140" FontWeight="Bold" />
+                            <DataGridTextColumn Header="Rate (ml)" Binding="{Binding CostPerMl, StringFormat='₹{0:F4}'}" Width="110" />
+                            <DataGridTextColumn Header="Subtotal" Binding="{Binding TotalCost, StringFormat='₹{0:F2}'}" Width="110" FontWeight="SemiBold" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+
+            <!-- Metrics & Summary KPI Card -->
+            <Border Grid.Row="3" Style="{StaticResource CardBorderStyle}" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="1.4*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Metric 1: Total Colorant -->
+                    <Border Grid.Column="0" BorderBrush="{StaticResource BrushBorder}" BorderThickness="0,0,1,0" Padding="0,0,16,0">
+                        <StackPanel>
+                            <TextBlock Text="TOTAL COLORANT" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushTextSecondary}" />
+                            <TextBlock Text="{Binding TotalColorantMl, StringFormat='{}{0:F2} ml'}"
+                                       FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,4,0,0" />
+                            <TextBlock Text="Dispensed volume" FontSize="12" Foreground="{StaticResource BrushTextMuted}" Margin="0,2,0,0" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Metric 2: Tint % & Limit -->
+                    <Border Grid.Column="1" BorderBrush="{StaticResource BrushBorder}" BorderThickness="0,0,1,0" Padding="16,0">
+                        <StackPanel>
+                            <TextBlock Text="TINT PERCENTAGE" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushTextSecondary}" />
+                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                <TextBlock Text="{Binding TintPercent, StringFormat='{}{0:F2}%'}"
+                                           FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushPrimary}" />
+                                <TextBlock Text="{Binding MaxTintPercent, StringFormat=' / {0:G29}% max'}"
+                                           FontSize="13" Foreground="{StaticResource BrushTextSecondary}" VerticalAlignment="Bottom" Margin="4,0,0,2" />
+                            </StackPanel>
+                            <TextBlock Text="Within base ceiling" FontSize="12" Foreground="{StaticResource BrushSuccess}" Margin="0,2,0,0" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Metric 3: Base Paint Cost -->
+                    <Border Grid.Column="2" BorderBrush="{StaticResource BrushBorder}" BorderThickness="0,0,1,0" Padding="16,0">
+                        <StackPanel>
+                            <TextBlock Text="BASE PAINT COST" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushTextSecondary}" />
+                            <TextBlock Text="{Binding BaseCost, StringFormat='₹{0:F2}'}"
+                                       FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,4,0,0" />
+                            <TextBlock Text="Can volume base" FontSize="12" Foreground="{StaticResource BrushTextMuted}" Margin="0,2,0,0" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Metric 4: Colorant Cost -->
+                    <Border Grid.Column="3" BorderBrush="{StaticResource BrushBorder}" BorderThickness="0,0,1,0" Padding="16,0">
+                        <StackPanel>
+                            <TextBlock Text="COLORANT COST" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushTextSecondary}" />
+                            <TextBlock Text="{Binding ColorantCost, StringFormat='₹{0:F2}'}"
+                                       FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" Margin="0,4,0,0" />
+                            <TextBlock Text="Tint additive cost" FontSize="12" Foreground="{StaticResource BrushTextMuted}" Margin="0,2,0,0" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Metric 5: Grand Total & Dispense Action -->
+                    <StackPanel Grid.Column="4" Margin="16,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="TOTAL FORMULA PRICE" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrushTextSecondary}" />
+                        <TextBlock Text="{Binding TotalPrice, StringFormat='₹{0:F2}'}"
+                                   FontSize="26" FontWeight="Bold" Foreground="{StaticResource BrushPrimaryActive}" Margin="0,2,0,8" />
+                        <Button Content="Dispense Formula"
+                                Command="{Binding DispenseCommand}"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Height="42"
+                                TabIndex="5" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Bottom Notifications & Status Area -->
+            <Grid Grid.Row="4">
+                <!-- Inline Error Banner -->
+                <Border Background="{StaticResource BrushDangerSoft}"
+                        BorderBrush="{StaticResource BrushDanger}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="16,12"
+                        Margin="0,0,0,8"
+                        Visibility="{Binding HasError, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="⚠ " FontSize="16" Foreground="{StaticResource BrushDanger}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                        <TextBlock Grid.Column="1" Text="{Binding ErrorMessage}"
+                                   Foreground="{StaticResource BrushDanger}"
+                                   FontWeight="Medium"
+                                   VerticalAlignment="Center"
+                                   TextWrapping="Wrap" />
+                        <Button Grid.Column="2" Command="{Binding DismissNotificationCommand}"
+                                Content="✕" Background="Transparent" BorderThickness="0"
+                                Foreground="{StaticResource BrushDanger}" Cursor="Hand" VerticalAlignment="Center" />
+                    </Grid>
+                </Border>
+
+                <!-- Inline Success Banner -->
+                <Border Background="{StaticResource BrushSuccessSoft}"
+                        BorderBrush="{StaticResource BrushSuccess}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="16,12"
+                        Margin="0,0,0,8"
+                        Visibility="{Binding HasSuccess, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding SuccessMessage}"
+                                   Foreground="{StaticResource BrushSuccess}"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center" />
+                        <Button Grid.Column="1" Command="{Binding DismissNotificationCommand}"
+                                Content="✕" Background="Transparent" BorderThickness="0"
+                                Foreground="{StaticResource BrushSuccess}" Cursor="Hand" VerticalAlignment="Center" />
+                    </Grid>
+                </Border>
+
+                <!-- Loading State Indicator -->
+                <Border Background="#90FFFFFF"
+                        CornerRadius="8"
+                        Padding="16,8"
+                        Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <ProgressBar IsIndeterminate="True" Width="80" Height="6" VerticalAlignment="Center" Margin="0,0,12,0" />
+                        <TextBlock Text="{Binding LoadingMessage}"
+                                   FontWeight="Medium"
+                                   Foreground="{StaticResource BrushTextPrimary}"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>
